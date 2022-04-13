@@ -1,4 +1,4 @@
-package config
+package conf
 
 type mi = map[string]interface{}
 
@@ -14,7 +14,12 @@ var TEST_MAPPING = mi{
 				"long":    mi{"type": "long"},
 				"keyword": mi{"type": "keyword"},
 				"date":    mi{"type": "date", "format": "yyyy-MM-dd HH:mm:ss"},
-				"text": mi{
+				"name1": mi{
+					"type":            "text",
+					"analyzer":        "ik_max_word",
+					"search_analyzer": "ik_max_word",
+				},
+				"name2": mi{
 					"type":            "text",
 					"analyzer":        "ik_max_word",
 					"search_analyzer": "ik_max_word",
@@ -42,7 +47,12 @@ var TEST_MAPPING = mi{
 						"long":    mi{"type": "long"},
 						"keyword": mi{"type": "keyword"},
 						"date":    mi{"type": "date", "format": "yyyy-MM-dd HH:mm:ss"},
-						"text": mi{
+						"name1": mi{
+							"type":            "text",
+							"analyzer":        "ik_max_word",
+							"search_analyzer": "ik_max_word",
+						},
+						"name2": mi{
 							"type":            "text",
 							"analyzer":        "ik_max_word",
 							"search_analyzer": "ik_max_word",
@@ -71,7 +81,12 @@ var TEST_MAPPING = mi{
 						"long":    mi{"type": "long"},
 						"keyword": mi{"type": "keyword"},
 						"date":    mi{"type": "date", "format": "yyyy-MM-dd HH:mm:ss"},
-						"text": mi{
+						"name1": mi{
+							"type":            "text",
+							"analyzer":        "ik_max_word",
+							"search_analyzer": "ik_max_word",
+						},
+						"name2": mi{
 							"type":            "text",
 							"analyzer":        "ik_max_word",
 							"search_analyzer": "ik_max_word",

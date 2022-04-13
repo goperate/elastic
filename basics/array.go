@@ -1,4 +1,4 @@
-package es
+package basics
 
 import (
 	"encoding/json"

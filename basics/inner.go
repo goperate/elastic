@@ -1,6 +1,8 @@
-package es
+package basics
 
-import "github.com/olivere/elastic"
+import (
+	"github.com/olivere/elastic"
+)
 
 type InnerHits interface {
 	InitInnerHits() *elastic.InnerHit

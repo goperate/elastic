@@ -1,4 +1,4 @@
-package config
+package conf
 
 import (
 	"github.com/olivere/elastic"
@@ -11,9 +11,9 @@ import (
 func init() {
 	// 读取yaml文件
 	// config := viper.New() // 通过New加载配置则只能用其返回值获取配置
-	config := viper.GetViper()            // 全局加载配置, 可在任意位置获取配置
-	config.AddConfigPath("./test/config") //设置读取的文件路径
-	config.SetConfigName("app")           //设置读取的文件名
+	config := viper.GetViper()          // 全局加载配置, 可在任意位置获取配置
+	config.AddConfigPath("./test/conf") //设置读取的文件路径
+	config.SetConfigName("app")         //设置读取的文件名
 	config.SetConfigType("yaml")
 	if err := config.ReadInConfig(); err != nil {
 		panic(err)
