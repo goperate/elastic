@@ -1,7 +1,7 @@
 package basics
 
 import (
-	"encoding/json"
+	jsoniter "github.com/json-iterator/go"
 	"strings"
 )
 
@@ -29,7 +29,7 @@ func (t *ArrayInt) UnmarshalJSON(b []byte) (err error) {
 		b = append(b, ']')
 	}
 	var val []int
-	err = json.Unmarshal(b, &val)
+	err = jsoniter.Unmarshal(b, &val)
 	*t = append(*t, val...)
 	return
 }
@@ -45,7 +45,7 @@ func (t *ArrayInt64) UnmarshalJSON(b []byte) (err error) {
 		b = append(b, ']')
 	}
 	var val []int64
-	err = json.Unmarshal(b, &val)
+	err = jsoniter.Unmarshal(b, &val)
 	*t = append(*t, val...)
 	return
 }
@@ -61,7 +61,7 @@ func (t *ArrayKeyword) UnmarshalJSON(b []byte) (err error) {
 	}
 	s = "[" + strings.Join(ss, ",") + "]"
 	var val []string
-	err = json.Unmarshal([]byte(s), &val)
+	err = jsoniter.Unmarshal([]byte(s), &val)
 	*t = append(*t, val...)
 	return
 }
@@ -73,12 +73,12 @@ func (t *ArrayString) UnmarshalJSON(b []byte) (err error) {
 	}
 	if b[0] == '[' {
 		var val []string
-		err = json.Unmarshal(b, &val)
+		err = jsoniter.Unmarshal(b, &val)
 		*t = append(*t, val...)
 	} else {
 		//s := strings.Trim(string(b), "\"")
 		var val string
-		err = json.Unmarshal(b, &val)
+		err = jsoniter.Unmarshal(b, &val)
 		*t = append(*t, val)
 	}
 	return

@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/goperate/es"
 	"github.com/goperate/es/basics"
 	"github.com/goperate/es/test/conf"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/olivere/elastic"
 	"github.com/spf13/viper"
 )
 
@@ -28,15 +28,31 @@ type FormBase struct {
 
 type Form struct {
 	FormBase
-	//Nested *FormBase `json:"nested" es:"nesting:nested"`
-	//Obj    *FormBase `json:"obj" es:"obj"`
+	Custom *int      `json:"custom" es:"custom"`
+	Nested *FormBase `json:"nested" es:"nesting:nested"`
+	Obj    *FormBase `json:"obj" es:"obj"`
+	Other  struct {
+		Id      *int            `json:"id" es:"sort;level:1"`
+		Integer basics.ArrayInt `json:"integer" es:"sort:val;level:2"`
+		Nested  struct {
+			LongSort basics.ArrayInt `json:"longSort" es:"sort;mode:min" field:"long"`
+			Integer  basics.ArrayInt `json:"integer"`
+		} `json:"nested" es:"sort:nested"`
+	} `es:"block"`
 }
 
 func (t *Form) Search() {
-	new(basics.StructAnalysis).Analysis(t)
-	query, _ := es.NewStructToQuery(t).ToBodyQuery()
+	obj := basics.NewStructToEsQueryAndCustomSearch(func(s string) []elastic.Query {
+		fmt.Println(s, "++++++++++++++++++++")
+		switch s {
+		case "custom":
+			return []elastic.Query{elastic.NewTermsQuery("long", 1, 2, 3, 4)}
+		}
+		fmt.Println(s, "++++++++++++++++++++")
+		return nil
+	})
 	req := conf.Es().Search().Index(viper.GetString("es.index"))
-	req.Query(query)
+	req.Query(obj.ToQuery(t)).SortBy(obj.GetSorters()...)
 	_, err := req.Do(context.Background())
 	fmt.Println(err)
 }
@@ -44,6 +60,13 @@ func (t *Form) Search() {
 func main() {
 	form := new(Form)
 	json := `{
+		"other": {
+			"nested": {
+				"longSort": 2,
+				"Integer": 1000
+			}
+		},
+		"custom": 1,
 		"integer": 10,
 		"integerNot": [12],
 		"long": 100,
